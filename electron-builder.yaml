@@ -1,0 +1,102 @@
+---
+appId: io.shuttle.tada
+productName: tada
+compression: maximum
+npmRebuild: false
+asar: true
+directories:
+  output: "build"
+  buildResources: "config"
+files:
+  - "!dist/*.map"
+  - "dist/**/*"
+  - "!**/*.log"
+  - "!**/*yaml"
+  - "!**/*.markdown"
+  - "!**/*.drawio"
+  - "!**/*.code-workspace"
+  - "!**/*.map"
+  - "!**/*.gz"
+  - "!**/*.threads"
+  - "package.json"
+extraResources:
+  - builtin-plugins
+  - extras
+asarUnpack:
+  # - "**/node_modules/**/*"
+
+win:
+  icon: "./conf/win/icon.ico"
+  artifactName: tada-${version}-protable.${ext}
+  rfc3161TimeStampServer: http://sha256timestamp.ws.symantec.com/sha256/timestamp
+nsis:
+  oneClick: false
+  artifactName: tada-${version}-setup.${ext}
+  installerIcon: "./conf/win/icon.ico"
+  allowToChangeInstallationDirectory: true
+  shortcutName: tada
+mac:
+  category: public.app-category.tools
+  icon: "./config/mac/icon.icns"
+  artifactName: tada-${version}-macos.${ext}
+  target:
+    - "dmg"
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: "config/mac/entitlements.plist"
+  entitlementsInherit: "config/mac/entitlements.plist"
+  extendInfo:
+    NSRequiresAquaSystemAppearance: false
+    NSCameraUsageDescription: "A subprocess requests access to the device's camera."
+    NSMicrophoneUsageDescription: "A subprocess requests access to the device's microphone."
+    NSLocationUsageDescription: "A subprocess requests access to the user's location information."
+    NSDesktopFolderUsageDescription: "A subprocess requests access to the user's Desktop folder."
+    NSDocumentsFolderUsageDescription: "A subprocess requests access to the user's Documents folder."
+    NSDownloadsFolderUsageDescription: "A subprocess requests access to the user's Downloads folder."
+    NSNetworkVolumesUsageDescription: "A subprocess requests access to files on a network volume."
+    NSRemovableVolumesUsageDescription: "A subprocess requests access to files on a removable volume."
+    CFBundleURLTypes:
+      - CFBundleURLSchemes
+        - 'tada'
+linux:
+  category: Utility
+  icon: "./config/linux/"
+  maintainer: "humphrey"
+  target:
+    - "deb"
+  artifactName: tada-${version}-linux.${ext}
+  # executableArgs:
+  #   - "--no-sandbox"
+  desktop:
+    StartupWMClass: tada
+    MimeType: "x-scheme-handler/tada"
+snap:
+  plugs:
+    - default
+    - system-files
+    - system-observe
+deb:
+  depends:
+    - gconf2
+    - gconf-service
+    - gnome-keyring
+    - libnotify4
+    - libsecret-1-0
+    - libxtst6
+    - libnss3
+  # afterInstall: config/linux/after-install.tpl
+  fpm:
+    - "--replaces"
+    - "terminus-terminal"
+pacman:
+  depends:
+    - gnome-keyring
+    - libsecret
+rpm:
+  depends:
+    - gnome-keyring
+  fpm:
+    - "--rpm-rpmbuild-define"
+    - "_build_id_links none"
+    - "--replaces"
+    - "terminus-terminal"
